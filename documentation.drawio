@@ -349,7 +349,7 @@
                 <mxCell id="124" value="Byte 16&lt;br&gt;DATA" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
                     <mxGeometry x="1600" y="1120" width="80" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="126" value="Byte 9" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="126" value="Byte 9&lt;br&gt;= 9" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
                     <mxGeometry x="1680" y="1080" width="80" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="127" value="Byte 17&lt;br&gt;DATA" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
@@ -388,19 +388,19 @@
                 <mxCell id="138" value="Byte 1&lt;br&gt;APP ID" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
                     <mxGeometry x="1680" y="1040" width="80" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="139" value="Byte 10" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="139" value="Byte 10&lt;br&gt;NOT USED" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
                     <mxGeometry x="1760" y="1080" width="80" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="141" value="Byte 11" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="141" value="Byte 11&lt;br&gt;NOT USED" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
                     <mxGeometry x="1840" y="1080" width="80" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="142" value="Byte 12" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="142" value="Byte 12&lt;br&gt;NOT USED" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
                     <mxGeometry x="1920" y="1080" width="80" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="143" value="Byte 13" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="143" value="Byte 13&lt;br&gt;NOT USED" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
                     <mxGeometry x="2000" y="1080" width="80" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="144" value="Byte 14" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="144" value="Byte 14&lt;br&gt;NOT USED" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
                     <mxGeometry x="2080" y="1080" width="80" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="145" value="Byte 15&lt;br&gt;DATA" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">

@@ -2,4 +2,5 @@
 
 #include <Arduino.h>
 
-#include "../lib/wrapper-rf24/wrapper-rf24.hpp"
+#include "../lib/protocol/protocol.hpp"
+#include "../lib/protocol-rf24/protocol-rf24.hpp"
