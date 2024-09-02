@@ -4,6 +4,7 @@
 
 #define PACKGE_PROTOCOL_NUMBER 9
 #define PACKGE_TYPE_SIGNAL 0b00000001
+#define PACKGE_TYPE_WRITE  0b00000010
 
 struct Packge
 {
@@ -34,3 +35,5 @@ Packge parsePackge(PackgeSerialized packgeSerialized);
 PackgeSerialized serializePackge(Packge packge);
 
 PackgeSerialized generateSignalPackge();
+
+PackgeSerialized generateWritePackge(uint8_t appId, uint16_t deviceId, uint32_t address, uint8_t numBytes, uint8_t op, uint8_t mask, uint8_t bytes[16]);

@@ -3,10 +3,11 @@
 void sendSignal(RF24 *radio, uint8_t channel)
 {
   uint64_t addressSignal = 0xf0f0f0f0f0ULL;
+  const byte address[6] = "00001";
 
   radio->stopListening();
   radio->setChannel(channel);
-  radio->openWritingPipe(addressSignal);
+  radio->openWritingPipe(address);
 
   auto signalPackge = generateSignalPackge();
 
@@ -40,7 +41,6 @@ uint8_t getGoodChannel(RF24 *radio, uint32_t timeCheck)
 
   return minI;
 }
-
 
 uint8_t findChannel(RF24 *radio, uint32_t timeout)
 {

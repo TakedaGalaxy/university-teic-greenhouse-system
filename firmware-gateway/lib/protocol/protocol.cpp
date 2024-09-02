@@ -73,3 +73,21 @@ PackgeSerialized generateSignalPackge()
   return serializePackge(packge);
 }
 
+PackgeSerialized generateWritePackge(uint8_t appId, uint16_t deviceId, uint32_t address, uint8_t numBytes, uint8_t op, uint8_t mask, uint8_t bytes[16])
+{
+  Packge packge;
+  packge.type = PACKGE_TYPE_WRITE;
+  packge.protocolNumber = PACKGE_PROTOCOL_NUMBER;
+  packge.appId = appId;
+  packge.deviceId[0] = (deviceId & 0xff00) >> 8;
+  packge.deviceId[1] = deviceId & 0xff;
+  packge.address[0] = (address & 0xff0000) >> 16;
+  packge.address[1] = (address & 0xff0000) >> 8;
+  packge.address[2] = address & 0xff;
+  packge.numBytes = numBytes;
+  packge.op = op;
+  packge.mask = mask;
+  memcpy(packge.data, bytes, sizeof(uint8_t) * 16);
+
+  return serializePackge(packge);
+}
