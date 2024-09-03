@@ -35,14 +35,32 @@ void logicRF24Protocol(RF24 *radio, MemoryProtocol *memory)
 
     writeMemoryProtocol(memory, 0, packge.data, packge.numBytes);
 
-    printf("packge data >");
-    for (int i = 0; i < packge.numBytes; i++)
-      printf("%u ", packge.data[i]);
-    printf("<\n");
+    printf("Sending Packge OK 5 times\n");
+
+    for (int i = 0; i < 5; i++)
+    {
+      auto packgeOkSerialized = generateOkPackge(0, 0, packge.address, 0, nullptr);
+
+      while (1)
+      {
+        if (isFreeToSendPackge(radio))
+        {
+          sendPackge(radio, packgeOkSerialized);
+          break;
+        }
+      }
+      delay(100);
+    }
 
     break;
 
   case PACKGE_TYPE_READ:
+    printf("Packge type is read !\n");
+
+    uint8_t *data = readMemoryProtocol(memory, 0);
+
+    auto packgeOkSerialized = generateOkPackge(0, 0, packge.address, packge.numBytes, data);
+
     break;
 
   default:
@@ -72,13 +90,15 @@ int main()
     if (currentTime - contador >= 1000)
     {
       contador = currentTime;
-      /*
-      printf("Update Memory ! %lu\n", contador);
-      writeMemoryProtocol(&memory, 0, contador);
-      */
+
+      // printf("Update Memory ! %lu\n", contador);
+
+      auto readValue = readMemoryProtocol<uint32_t>(&memory, 0);
+      readValue += 1000;
+      writeMemoryProtocol(&memory, 0, readValue);
 
       printf("MemoryProtocol >");
-      for (int i = 0; i < memory.size; i++)
+      for (size_t i = 0; i < memory.size; i++)
         printf("%u%c", memory.data[i], i < memory.size - 1 ? ' ' : '<');
 
       printf("\n");

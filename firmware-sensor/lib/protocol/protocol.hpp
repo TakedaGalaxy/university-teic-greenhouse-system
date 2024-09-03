@@ -8,7 +8,6 @@
 #define PACKGE_TYPE_READ 0b00000011
 #define PACKGE_TYPE_OK 0b00000100
 #define PACKGE_TYPE_FAIL 0b00000101
-#define PACKGE_TYPE_RES 0b00000101
 
 struct Packge
 {
@@ -74,3 +73,7 @@ T readMemoryProtocol(MemoryProtocol *memory, uint32_t address)
   memcpy(&value, memory->data + address, sizeof(T));
   return value;
 }
+
+uint8_t *readMemoryProtocol(MemoryProtocol *memory, uint32_t address);
+
+PackgeSerialized generateOkPackge(uint8_t appId, uint16_t deviceId, uint32_t address, uint8_t numBytes, uint8_t bytes[16]);

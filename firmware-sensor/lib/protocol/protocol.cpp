@@ -81,7 +81,7 @@ PackgeSerialized generateWritePackge(uint8_t appId, uint16_t deviceId, uint32_t 
   packge.numBytes = numBytes;
   packge.op = op;
   packge.mask = mask;
-  memcpy(packge.data, bytes, sizeof(uint8_t) * 16);
+  memcpy(packge.data, bytes, sizeof(uint8_t) * numBytes);
 
   return serializePackge(packge);
 }
@@ -112,4 +112,27 @@ bool isPackgeMine(Packge packge, uint8_t appId, uint16_t deviceId)
 void writeMemoryProtocol(MemoryProtocol *memory, uint32_t address, uint8_t *data, uint8_t numBytes)
 {
   memcpy(memory->data + address, data, sizeof(uint8_t) * numBytes);
+}
+
+PackgeSerialized generateOkPackge(uint8_t appId, uint16_t deviceId, uint32_t address, uint8_t numBytes, uint8_t bytes[16])
+{
+  Packge packge;
+  packge.type = PACKGE_TYPE_OK;
+  packge.protocolNumber = PACKGE_PROTOCOL_NUMBER;
+  packge.appId = appId;
+  packge.deviceId = deviceId;
+  packge.address = address;
+  packge.numBytes = numBytes;
+  packge.op = 0;
+  packge.mask = 0;
+
+  if (bytes != nullptr)
+    memcpy(packge.data, bytes, sizeof(uint8_t) * 16);
+
+  return serializePackge(packge);
+}
+
+uint8_t *readMemoryProtocol(MemoryProtocol *memory, uint32_t address)
+{
+  return memory->data + address;
 }
