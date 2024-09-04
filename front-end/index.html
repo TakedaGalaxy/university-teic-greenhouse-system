@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GreenHouse WEB</title>
+  <style>
+    #Container-Devices {
+      display: flex;
+      gap: 5px;
+      flex-direction: column;
+    }
+
+    element-device {
+      border: solid black 1px;
+      padding: 15px;
+      border-radius: 5px;
+    }
+
+    element-device .loading {
+      border: solid blue 2px;
+      cursor: progress;
+    }
+
+    element-device .fail {
+      border: solid red 2px;
+    }
+
+    element-device .success {
+      border: solid green 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="Container-Devices">
+  </div>
+
+  <script>
+    const containerDevices = document.getElementById("Container-Devices");
+
+    class ElementDevice extends HTMLElement {
+      address;
+
+      counterLifeValueRef;
+      buttonClearCounterLife;
+      onClearCounterLife = null;
+
+      timeOutEnableButton = null;
+
+      constructor(address) {
+        super();
+        this.address = address;
+
+        const title = document.createElement("h3");
+
+        title.innerHTML = `Dispositivo: ${address}`;
+
+        const containerCounterLife = document.createElement("div");
+
+        const counterLifeName = document.createElement("p");
+        counterLifeName.innerHTML = "Contador de vida";
+
+        this.counterLifeValueRef = document.createElement("p");
+        this.counterLifeValueRef.innerHTML = "0";
+
+        containerCounterLife.appendChild(counterLifeName);
+        containerCounterLife.appendChild(this.counterLifeValueRef);
+
+        this.buttonClearCounterLife = document.createElement("button");
+        this.buttonClearCounterLife.innerHTML = "Limpar contador"
+
+        this.buttonClearCounterLife.addEventListener("click", () => {
+          if (this.onClearCounterLife === null) return;
+
+          this.buttonClearCounterLife.disabled = true;
+
+          this.timeOutEnableButton = setTimeout(() => { 
+          this.buttonClearCounterLife.disabled = false;
+          }, 2000);
+
+          this.onClearCounterLife(this.address);
+        });
+
+        this.appendChild(title);
+        this.appendChild(containerCounterLife);
+        this.appendChild(this.buttonClearCounterLife)
+      }
+
+      setButtonSentClearCounter() {
+        if (this.timeOutEnableButton !== null)
+          clearTimeout(this.timeOutEnableButton);
+        this.buttonClearCounterLife.disabled = true;
+        this.buttonClearCounterLife.className = "loading";
+      }
+
+      setButtonSucessClearCounter() {
+        this.buttonClearCounterLife.disabled = false;
+        this.buttonClearCounterLife.className = "success";
+      }
+
+      setButtonFailClearCounter() {
+        this.buttonClearCounterLife.disabled = false;
+        this.buttonClearCounterLife.className = "fail";
+      }
+
+      setCounterLifeValue(value){
+        this.counterLifeValueRef.innerHTML = `${value}`;
+      }
+    }
+
+    customElements.define("element-device", ElementDevice);
+
+    const listDevice = new Map();
+
+    listDevice.set(0, new ElementDevice(0));
+    listDevice.set(1, new ElementDevice(1));
+
+    listDevice.forEach((elementDevice) => {
+      containerDevices.append(elementDevice);
+    })
+
+    let connectado = false;
+
+    const socket = new WebSocket('ws://localhost:4000');
+
+    // Quando a conexão é aberta
+    socket.addEventListener('open', (event) => {
+      socket.send(JSON.stringify({ appId: 0, command: "LISTEN" }));
+      connectado = true;
+    });
+
+    // Quando uma mensagem é recebida do servidor
+    socket.addEventListener('message', (event) => {
+      console.log(event.data);
+
+      const {device, command, status, variable, value} = JSON.parse(event.data);
+
+      if(variable === "COUNTER"){
+        const elementDevice = listDevice.get(device);
+
+        if(elementDevice === undefined) return;
+
+        if(command === "W" && status === "SENT"){
+          elementDevice.setButtonSentClearCounter();
+          return;
+        }
+
+        if(command === "W" && status === "OK"){
+          elementDevice.setButtonSucessClearCounter();
+          return;
+        }
+
+        if(command === "W" && status === "NOT_FREE"){
+          elementDevice.setButtonSucessClearCounter();
+          return;
+        }
+
+        if(command === "R" && status === "OK"){
+          elementDevice.setCounterLifeValue(value);
+        }
+
+      }
+    });
+
+    // Quando a conexão é fechada
+    socket.addEventListener('close', (event) => {
+      console.log('WebSocket is disconnected.');
+    });
+
+    // Quando ocorre um erro
+    socket.addEventListener('error', (event) => {
+      console.error('WebSocket error observed:', event);
+    });
+
+    listDevice.forEach((elementDevice) => {
+
+      elementDevice.onClearCounterLife = ((device) => {
+        socket.send(JSON.stringify({
+          device,
+          command: "W",
+          variable: "COUNTER",
+          value: 10
+        }));
+      });
+
+    });
+
+  </script>
+</body>
+
+</html>

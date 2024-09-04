@@ -73,7 +73,7 @@ RF24 *configRF24Sensor(uint8_t ce, uint8_t csn)
 
   if (!radio->begin())
   {
-    Serial.println("RF24 Not Responding");
+    Serial.print("RF24 Not Responding\n");
     while (1)
       ;
   }
@@ -89,7 +89,7 @@ RF24 *configRF24Sensor(uint8_t ce, uint8_t csn)
 
   radio->startListening();
 
-  Serial.println("Started RF24 !");
+  Serial.print("Started RF24 !\n");
 
   return radio;
 }
@@ -100,7 +100,7 @@ RF24 *configRF24Transmiter(uint8_t ce, uint8_t csn)
 
   if (!radio->begin())
   {
-    Serial.println("RF24 Not Responding");
+    Serial.print("RF24 Not Responding\n");
     while (1)
       ;
   }
@@ -116,7 +116,7 @@ RF24 *configRF24Transmiter(uint8_t ce, uint8_t csn)
 
   radio->startListening();
 
-  Serial.println("Started RF24 !");
+  Serial.print("Started RF24 !\n");
 
   return radio;
 }
