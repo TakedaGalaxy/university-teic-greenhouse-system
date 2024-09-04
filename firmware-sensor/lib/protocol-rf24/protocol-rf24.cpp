@@ -75,11 +75,8 @@ RF24 *configRF24Sensor(uint8_t ce, uint8_t csn)
   {
     Serial.println("RF24 Not Responding");
     while (1)
-    {
-    } // hold in infinite loop
+      ;
   }
-
-  radio->begin();
 
   radio->setPALevel(RF24_PA_MAX);
   radio->setChannel(PROTOCOL_CHANNEL);
@@ -89,10 +86,37 @@ RF24 *configRF24Sensor(uint8_t ce, uint8_t csn)
 
   radio->openWritingPipe(ADDRESS_PACKGE);
   radio->openReadingPipe(1, ADDRESS_PACKGE);
-  
+
   radio->startListening();
 
-  Serial.println(F("Started RF24 !"));
+  Serial.println("Started RF24 !");
+
+  return radio;
+}
+
+RF24 *configRF24Transmiter(uint8_t ce, uint8_t csn)
+{
+  auto radio = new RF24(ce, csn);
+
+  if (!radio->begin())
+  {
+    Serial.println("RF24 Not Responding");
+    while (1)
+      ;
+  }
+
+  radio->setPALevel(RF24_PA_MAX);
+  radio->setChannel(PROTOCOL_CHANNEL);
+  radio->setAutoAck(false);
+  radio->setCRCLength(RF24_CRC_DISABLED);
+  radio->setDataRate(RF24_2MBPS);
+
+  radio->openWritingPipe(ADDRESS_PACKGE);
+  radio->openReadingPipe(1, ADDRESS_PACKGE);
+
+  radio->startListening();
+
+  Serial.println("Started RF24 !");
 
   return radio;
 }
@@ -115,32 +139,7 @@ void sendPackge(RF24 *radio, PackgeSerialized packge)
 {
   radio->stopListening();
   radio->write(packge.data, packge.size);
-}
-
-RF24 *configRF24Transmiter(uint8_t ce, uint8_t csn)
-{
-  auto radio = new RF24(ce, csn);
-
-  if (!radio->begin())
-  {
-    Serial.println("RF24 Not Responding");
-    while (1)
-    {
-    } // hold in infinite loop
-  }
-
-  radio->setPALevel(RF24_PA_MAX);
-  radio->setChannel(PROTOCOL_CHANNEL);
-  radio->setAutoAck(false);
-  radio->setCRCLength(RF24_CRC_DISABLED);
-  radio->setDataRate(RF24_2MBPS);
-
-  radio->openWritingPipe(ADDRESS_PACKGE);
-  radio->openReadingPipe(1, ADDRESS_PACKGE);
-
-  Serial.println(F("Started RF24 !"));
-
-  return radio;
+  radio->startListening();
 }
 
 bool isFreeToSendPackge(RF24 *radio)
@@ -159,6 +158,7 @@ bool isFreeToSendPackge(RF24 *radio)
     delayMicroseconds(270);
 
   radio->flush_rx();
+  radio->startListening();
 
   return isFree;
 }

@@ -136,3 +136,18 @@ uint8_t *readMemoryProtocol(MemoryProtocol *memory, uint32_t address)
 {
   return memory->data + address;
 }
+
+PackgeSerialized generateReadPackge(uint8_t appId, uint16_t deviceId, uint32_t address, uint8_t numBytes, uint8_t op, uint8_t mask)
+{
+  Packge packge;
+  packge.type = PACKGE_TYPE_READ;
+  packge.protocolNumber = PACKGE_PROTOCOL_NUMBER;
+  packge.appId = appId;
+  packge.deviceId = deviceId;
+  packge.address = address;
+  packge.numBytes = numBytes;
+  packge.op = op;
+  packge.mask = mask;
+
+  return serializePackge(packge);
+}

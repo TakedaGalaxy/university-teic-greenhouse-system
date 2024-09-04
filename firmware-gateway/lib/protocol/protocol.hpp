@@ -15,8 +15,8 @@ struct Packge
   uint8_t appId = 0;
   uint16_t deviceId = 0;
   uint32_t address = 0;
-  uint8_t numBytes = 0; // 4bits MSB
-  uint8_t op = 0;       // 4bits LSB
+  uint8_t numBytes = 0;
+  uint8_t op = 0;
   uint8_t mask = 0;
   uint8_t protocolNumber = PACKGE_PROTOCOL_NUMBER;
   uint8_t data[16] = {0};
@@ -77,3 +77,5 @@ T readMemoryProtocol(MemoryProtocol *memory, uint32_t address)
 uint8_t *readMemoryProtocol(MemoryProtocol *memory, uint32_t address);
 
 PackgeSerialized generateOkPackge(uint8_t appId, uint16_t deviceId, uint32_t address, uint8_t numBytes, uint8_t bytes[16]);
+
+PackgeSerialized generateReadPackge(uint8_t appId, uint16_t deviceId, uint32_t address, uint8_t numBytes, uint8_t op = 0, uint8_t mask = 0);

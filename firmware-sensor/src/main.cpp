@@ -43,11 +43,12 @@ void logicRF24Protocol(RF24 *radio, MemoryProtocol *memory)
 
       while (1)
       {
-        if (isFreeToSendPackge(radio))
-        {
-          sendPackge(radio, packgeOkSerialized);
-          break;
-        }
+        if (!isFreeToSendPackge(radio))
+          continue;
+
+        sendPackge(radio, packgeOkSerialized);
+        printf("[%d] Ok packge sent !\n", i);
+        break;
       }
       delay(100);
     }
@@ -95,12 +96,12 @@ int main()
 
       auto readValue = readMemoryProtocol<uint32_t>(&memory, 0);
       readValue += 1000;
+
       writeMemoryProtocol(&memory, 0, readValue);
 
       printf("MemoryProtocol >");
       for (size_t i = 0; i < memory.size; i++)
         printf("%u%c", memory.data[i], i < memory.size - 1 ? ' ' : '<');
-
       printf("\n");
     }
   }
