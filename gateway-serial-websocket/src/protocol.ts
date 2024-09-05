@@ -46,20 +46,20 @@ export class Package {
   }
 
   get deviceId(): number {
-    return this.view.getUint16(3, true); // true para little-endian
+    return this.view.getUint16(3); // true para little-endian
   }
 
   set deviceId(value: number) {
-    this.view.setUint16(3, value, true); // true para little-endian
+    this.view.setUint16(3, value); // true para little-endian
   }
 
   get address(): number {
-    return (this.view.getUint8(5) << 16) | this.view.getUint16(6, true); // true para little-endian
+    return (this.view.getUint8(5) << 16) | this.view.getUint16(6); // true para little-endian
   }
 
   set address(value: number) {
     this.view.setUint8(5, value >> 16 & 0xFF);
-    this.view.setUint16(6, value & 0xFFFF, true); // true para little-endian
+    this.view.setUint16(6, value & 0xFFFF); // true para little-endian
   }
 
   get op(): number {

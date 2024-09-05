@@ -54,6 +54,7 @@ void logicSerialControl(RF24 *radio)
     for (int i = 0; i < packgeSerialized.size; i++)
       printf("%.2x%c", packgeSerialized.data[i], i < packgeSerialized.size - 1 ? ',' : '\n');
 
+    /*
     // Apagar apenas para teste
     printf("@OK-");
     uint8_t data[16] = {0};
@@ -62,6 +63,7 @@ void logicSerialControl(RF24 *radio)
     auto packgeOk = generateOkPackge(0, 0, 0, 4, data);
     for (int i = 0; i < packgeOk.size; i++)
       printf("%.2x%c", packgeOk.data[i], i < packgeOk.size - 1 ? ',' : '\n');
+    */
     return;
   }
 
@@ -96,12 +98,13 @@ void logicSerialControl(RF24 *radio)
     for (int i = 0; i < packgeSerialized.size; i++)
       printf("%.2x%c", packgeSerialized.data[i], i < packgeSerialized.size - 1 ? ',' : '\n');
 
+    /*
     // Apagar apenas para teste
     printf("@OK-");
     auto packgeOk = generateOkPackge(0, 0, 0, 0, nullptr);
     for (int i = 0; i < packgeOk.size; i++)
       printf("%.2x%c", packgeOk.data[i], i < packgeOk.size - 1 ? ',' : '\n');
-
+    */
     return;
   }
 
@@ -129,6 +132,12 @@ void logicReadPackges(RF24 *radio)
     return;
 
   printf("Packge is valid !\n");
+
+  if(packge.type != PACKGE_TYPE_OK) return;
+
+  printf("@OK-");
+  for (int i = 0; i < packgeSerialized.size; i++)
+    printf("%.2x%c", packgeSerialized.data[i], i < packgeSerialized.size - 1 ? ',' : '\n');
 }
 
 int main()

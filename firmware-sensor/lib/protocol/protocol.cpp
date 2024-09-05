@@ -127,7 +127,7 @@ PackgeSerialized generateOkPackge(uint8_t appId, uint16_t deviceId, uint32_t add
   packge.mask = 0;
 
   if (bytes != nullptr)
-    memcpy(packge.data, bytes, sizeof(uint8_t) * 16);
+    memcpy(packge.data, bytes, sizeof(uint8_t) * numBytes);
 
   return serializePackge(packge);
 }

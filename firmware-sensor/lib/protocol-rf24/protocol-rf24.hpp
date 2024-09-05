@@ -11,8 +11,8 @@
 #define CSN_PIN 8
 
 #define ADDRESS_PACKGE 0xf0f0f0f0f0ULL
-#define NUM_CHANNELS 128
-#define PROTOCOL_CHANNEL 90
+#define NUM_CHANNELS 52
+#define PROTOCOL_CHANNEL 52
 
 void sendSignal(RF24 *radio, uint8_t channel);
 

@@ -1,6 +1,8 @@
 #include "main.hpp"
 #include "printf.h"
 
+#define DEVICE_ID 1
+
 void logicRF24Protocol(RF24 *radio, MemoryProtocol *memory)
 {
 
@@ -22,8 +24,8 @@ void logicRF24Protocol(RF24 *radio, MemoryProtocol *memory)
     return;
 
   printf("Packge is valid !\n");
-
-  if (!isPackgeMine(packge, 0, 0))
+  printf("%d\n", packge.deviceId);
+  if (!isPackgeMine(packge, 0, DEVICE_ID))
     return;
 
   printf("Packge is mine !\n");
@@ -37,9 +39,9 @@ void logicRF24Protocol(RF24 *radio, MemoryProtocol *memory)
 
     printf("Sending Packge OK 5 times\n");
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 6; i++)
     {
-      auto packgeOkSerialized = generateOkPackge(0, 0, packge.address, 0, nullptr);
+      auto packgeOkSerialized = generateOkPackge(0, DEVICE_ID, packge.address, 0, nullptr);
 
       while (1)
       {
@@ -50,7 +52,7 @@ void logicRF24Protocol(RF24 *radio, MemoryProtocol *memory)
         printf("[%d] Ok packge sent !\n", i);
         break;
       }
-      delay(100);
+      delay(40);
     }
 
     break;
@@ -58,9 +60,25 @@ void logicRF24Protocol(RF24 *radio, MemoryProtocol *memory)
   case PACKGE_TYPE_READ:
     printf("Packge type is read !\n");
 
-    uint8_t *data = readMemoryProtocol(memory, 0);
+    uint8_t *data = readMemoryProtocol(memory, packge.address);
 
-    auto packgeOkSerialized = generateOkPackge(0, 0, packge.address, packge.numBytes, data);
+    auto packgeOkSerialized = generateOkPackge(0, DEVICE_ID, packge.address, packge.numBytes, data);
+
+    printf("Sending Packge OK 5 times\n");
+
+    for (int i = 0; i < 6; i++)
+    {
+      while (1)
+      {
+        if (!isFreeToSendPackge(radio))
+          continue;
+
+        sendPackge(radio, packgeOkSerialized);
+        printf("[%d] Ok packge sent !\n", i);
+        break;
+      }
+      delay(40);
+    }
 
     break;
 
@@ -93,7 +111,15 @@ int main()
       contador = currentTime;
 
       // printf("Update Memory ! %lu\n", contador);
-
+      /*
+      uint8_t *data = readMemoryProtocol(&memory, 0);
+      auto packgeOkSerialized = generateOkPackge(0, 0, 0, 4, data);
+      for (int i = 0; i < 6; i++)
+      {
+        sendPackge(radio, packgeOkSerialized);
+        delay(100);
+      }
+      */
       auto readValue = readMemoryProtocol<uint32_t>(&memory, 0);
       readValue += 1000;
 
@@ -102,6 +128,7 @@ int main()
       printf("MemoryProtocol >");
       for (size_t i = 0; i < memory.size; i++)
         printf("%u%c", memory.data[i], i < memory.size - 1 ? ' ' : '<');
+
       printf("\n");
     }
   }

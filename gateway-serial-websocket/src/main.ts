@@ -392,7 +392,7 @@ function readMemorys() {
     });
 
     readMemorys();
-  }, 500);
+  }, 1800);
 }
 
 readMemorys();
@@ -407,4 +407,4 @@ setInterval(() => {
     serial.sendPackge(packge);
   }
 
-}, 200);
+}, 700);
